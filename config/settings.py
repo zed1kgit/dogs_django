@@ -43,7 +43,7 @@ INSTALLED_APPS = [
 
     # Добавленное
     'users',
-    'dogs.apps.DogsConfig'
+    'dogs'
 ]
 
 MIDDLEWARE = [
