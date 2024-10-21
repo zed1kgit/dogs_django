@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 
 from dogs.models import Category, Dog
+from dogs.forms import DogForm
 
 def index(request):
     context = {
@@ -26,3 +29,20 @@ def category_dogs(request, pk):
         'category_pk': category_item.pk,
     }
     return render(request, 'dogs/dogs.html')
+
+
+def dogs_list_view(request):
+    context = {
+        'object_list': Dog.objects.all(),
+        'title': 'Все собаки',
+    }
+    return render(request, 'dogs/dogs.html', context)
+
+
+def dog_create_view(request):
+    if request.method == 'POST':
+        form = DogForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('dogs:list_dogs'))
+    return render(request, 'dogs/create.html', {'form': DogForm()})
