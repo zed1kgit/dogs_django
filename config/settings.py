@@ -95,7 +95,8 @@ DATABASES = {
         'HOST': HOST,
         'PORT': '',
         'OPTIONS': {
-            'driver': 'ODBC Driver 17 for SQL Server'
+            'driver': 'ODBC Driver 18 for SQL Server',
+            'extra_params': 'Encrypt=Optional',
         }
     }
 }
