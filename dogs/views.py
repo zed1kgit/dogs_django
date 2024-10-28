@@ -8,7 +8,7 @@ from dogs.forms import DogForm
 def index(request):
     """Рендер главной страницы"""
     context = {
-        'object_list': Category.objects.all()[:3],
+        'category_object_list': Category.objects.all()[:3],
         'title': 'Главная'
     }
     return render(request, 'dogs/index.html', context)
@@ -17,7 +17,7 @@ def index(request):
 def categories(request):
     """Рендер страницы пород"""
     context = {
-        'object_list': Category.objects.all(),
+        'category_object_list': Category.objects.all(),
         'title': 'Породы'
     }
     return render(request, 'dogs/categories.html', context)
