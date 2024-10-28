@@ -89,7 +89,7 @@ PASSWORD = os.getenv('MS_SQL_KEY')
 DATABASES = {
     'default': {
         'ENGINE': 'mssql',
-        'NAME': "DjangoDB",
+        'NAME': DATABASE,
         'USER': USER,
         'PASSWORD': PASSWORD,
         'HOST': HOST,
