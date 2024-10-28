@@ -50,7 +50,7 @@ def dog_create_view(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('dogs:list_dogs'))
-    return render(request, 'dogs/create.html', {'form': DogForm()})
+    return render(request, 'dogs/create_update.html', {'form': DogForm()})
 
 
 def dog_detail_view(request, pk):
@@ -71,7 +71,7 @@ def dog_update_view(request, pk):
             dog_object = form.save()
             dog_object.save()
             return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
-    return render(request, 'dogs/update.html', {
+    return render(request, 'dogs/create_update.html', {
         'object': dog_object,
         'form': DogForm(instance=dog_object)
     }, )
