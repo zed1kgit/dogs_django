@@ -6,6 +6,7 @@ from dogs.models import Category, Dog
 from dogs.forms import DogForm
 
 def index(request):
+    """Рендер главной страницы"""
     context = {
         'object_list': Category.objects.all()[:3],
         'title': 'Главная'
@@ -14,6 +15,7 @@ def index(request):
 
 
 def categories(request):
+    """Рендер страницы пород"""
     context = {
         'object_list': Category.objects.all(),
         'title': 'Породы'
@@ -22,6 +24,7 @@ def categories(request):
 
 
 def category_dogs(request, pk):
+    """Рендер страницы с собаками определенной породы"""
     category_item = Category.objects.get(pk=pk)
     context = {
         'object_list': Dog.objects.filter(category_id=pk),
@@ -32,6 +35,7 @@ def category_dogs(request, pk):
 
 
 def dogs_list_view(request):
+    """Рендер страницы со всеми собаками"""
     context = {
         'object_list': Dog.objects.all(),
         'title': 'Все собаки',
@@ -40,6 +44,7 @@ def dogs_list_view(request):
 
 
 def dog_create_view(request):
+    """Рендер страницы с созданием новой собаки"""
     if request.method == 'POST':
         form = DogForm(request.POST, request.FILES)
         if form.is_valid():
@@ -49,6 +54,7 @@ def dog_create_view(request):
 
 
 def dog_detail_view(request, pk):
+    """Рендер страницы отображающая выбранную собаку"""
     context = {
         'object': Dog.objects.get(pk=pk),
         'title': 'Вы выбрали данную собаку'
@@ -57,6 +63,7 @@ def dog_detail_view(request, pk):
 
 
 def dog_update_view(request, pk):
+    """Рендер страницы редактирования выбранной собаки"""
     dog_object = get_object_or_404(Dog, pk=pk)
     if request.method == 'POST':
         form = DogForm(request.POST, request.FILES, instance=dog_object)
@@ -71,6 +78,7 @@ def dog_update_view(request, pk):
 
 
 def dog_delete_view(request, pk):
+    """Рендер страницы и удаление выбранной собаки"""
     dog_object = get_object_or_404(Dog, pk=pk)
     if request.method == 'POST':
         dog_object.delete()
