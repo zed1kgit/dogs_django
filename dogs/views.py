@@ -27,7 +27,7 @@ def category_dogs(request, pk):
     """Рендер страницы с собаками определенной породы"""
     category_item = Category.objects.get(pk=pk)
     context = {
-        'object_list': Dog.objects.filter(category_id=pk),
+        'dog_object_list': Dog.objects.filter(category_id=pk),
         'title': f'Собаки породы - {category_item.name}',
         'category_pk': category_item.pk,
     }
@@ -37,7 +37,7 @@ def category_dogs(request, pk):
 def dogs_list_view(request):
     """Рендер страницы со всеми собаками"""
     context = {
-        'object_list': Dog.objects.all(),
+        'dog_object_list': Dog.objects.all(),
         'title': 'Все собаки',
     }
     return render(request, 'dogs/dogs.html', context)
