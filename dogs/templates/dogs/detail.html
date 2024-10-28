@@ -6,17 +6,17 @@
     <div class="card mb-4 box-shadow">
 
         <img class="card-img-top"
-             src="{{ object.photo|dogs_media }}" width="300" height="320"
+             src="{{ dog_object.photo|dogs_media }}" width="300" height="320"
              alt="Card image cap">
         <div class="card-body">
-            <p class="card-text">{{ object.name|title }}</p>
-            <span class="text-muted">{{ object.birth_date|default:"-" }}</span><br>
-            <span class="text-muted">{{ object.owner|default:"Без хозяина" }}</span><br>
+            <p class="card-text">{{ dog_object.name|title }}</p>
+            <span class="text-muted">{{ dog_object.birth_date|default:"-" }}</span><br>
+            <span class="text-muted">{{ dog_object.owner|default:"Без хозяина" }}</span><br>
         </div>
         <div class="card-footer">
-            <a class="btn btn-link" href="{% url 'dogs:category_dogs' object.category_id %}">назад</a>
-            <a class="btn btn-link" href="{% url 'dogs:update_dog' object.pk %}">обновить</a>
-            <a class="btn btn-link" href="{% url 'dogs:delete_dog' object.pk %}">удалить</a>
+            <a class="btn btn-link" href="{% url 'dogs:category_dogs' dog_object.category_id %}">назад</a>
+            <a class="btn btn-link" href="{% url 'dogs:update_dog' dog_object.pk %}">обновить</a>
+            <a class="btn btn-link" href="{% url 'dogs:delete_dog' dog_object.pk %}">удалить</a>
         </div>
 
     </div>

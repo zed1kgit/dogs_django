@@ -56,7 +56,7 @@ def dog_create_view(request):
 def dog_detail_view(request, pk):
     """Рендер страницы отображающая выбранную собаку"""
     context = {
-        'object': Dog.objects.get(pk=pk),
+        'dog_object': Dog.objects.get(pk=pk),
         'title': 'Вы выбрали данную собаку'
     }
     return render(request, 'dogs/detail.html', context)
@@ -72,7 +72,7 @@ def dog_update_view(request, pk):
             dog_object.save()
             return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
     return render(request, 'dogs/create_update.html', {
-        'object': dog_object,
+        'dog_object': dog_object,
         'form': DogForm(instance=dog_object)
     }, )
 
@@ -84,5 +84,5 @@ def dog_delete_view(request, pk):
         dog_object.delete()
         return HttpResponseRedirect(reverse('dogs:list_dogs'))
     return render(request, 'dogs/delete.html', {
-        'object': dog_object,
+        'dog_object': dog_object,
     }, )
