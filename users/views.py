@@ -49,7 +49,7 @@ def user_update_view(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, request.FILES, instance=user_object)
         if form.is_valid():
-            user = form.save()
+            user_object = form.save()
             user_object.save()
             return HttpResponseRedirect(reverse('users:profile_user'))
     user_name = user_object.first_name
