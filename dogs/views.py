@@ -5,6 +5,7 @@ from django.urls import reverse
 from dogs.models import Category, Dog
 from dogs.forms import DogForm
 
+
 def index(request):
     """Рендер главной страницы"""
     context = {
@@ -48,9 +49,15 @@ def dog_create_view(request):
     if request.method == 'POST':
         form = DogForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            dog_object = form.save()
+            dog_object.owner = request.user
+            dog_object.save()
             return HttpResponseRedirect(reverse('dogs:list_dogs'))
-    return render(request, 'dogs/create_update.html', {'form': DogForm()})
+    context = {
+        'title': 'Добавление питомца',
+        'form': DogForm()
+    }
+    return render(request, 'dogs/create_update.html', context)
 
 
 def dog_detail_view(request, pk):
@@ -71,10 +78,11 @@ def dog_update_view(request, pk):
             dog_object = form.save()
             dog_object.save()
             return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
-    return render(request, 'dogs/create_update.html', {
+    context = {
         'dog_object': dog_object,
         'form': DogForm(instance=dog_object)
-    }, )
+    }
+    return render(request, 'dogs/create_update.html', context)
 
 
 def dog_delete_view(request, pk):
