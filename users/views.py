@@ -1,3 +1,6 @@
+import string
+import random
+
 from django.http import HttpResponseRedirect, HttpResponse
 
 from django.contrib import messages
@@ -6,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm
-from users.services import send_register_email
+from users.services import send_register_email, send_new_password
 
 
 def user_register_view(request):
@@ -93,3 +96,12 @@ def user_change_password_view(request):
 def user_logout_view(request):
     logout(request)
     return redirect('dogs:index')
+
+
+@login_required
+def user_generate_new_password(request):
+    new_password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+    request.user.set_password(new_password)
+    request.user.save()
+    send_new_password(request.user.email, new_password)
+    return redirect(reverse('dogs:index'))
