@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout, update_session_auth
 from django.contrib.auth.decorators import login_required
 
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm
+from users.services import send_register_email
 
 
 def user_register_view(request):
@@ -15,6 +16,7 @@ def user_register_view(request):
             new_user = form.save()
             new_user.set_password(form.cleaned_data['password'])
             new_user.save()
+            send_register_email(new_user.email)
             return HttpResponseRedirect(reverse('users:login_user'))
     context = {
         'form': form
