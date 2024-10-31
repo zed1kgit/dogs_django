@@ -5,7 +5,7 @@ from django.shortcuts import render, reverse, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
+from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm
 
 
 def user_register_view(request):
@@ -73,7 +73,7 @@ def user_update_view(request):
 def user_change_password_view(request):
     user_object = request.user
     if request.method == 'POST':
-        form = UserPasswordChangeForm(user_object, request.POST)
+        form = UserChangePasswordForm(user_object, request.POST)
         if form.is_valid():
             user_object = form.save()
             update_session_auth_hash(request, user_object)
@@ -82,7 +82,7 @@ def user_change_password_view(request):
         else:
             messages.error(request, "Не удалось изменить пароль")
 
-    form = UserPasswordChangeForm()
+    form = UserChangePasswordForm()
     context = {
         'form': form
     }
