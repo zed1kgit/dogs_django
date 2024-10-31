@@ -72,8 +72,8 @@ def user_update_view(request):
 @login_required
 def user_change_password_view(request):
     user_object = request.user
+    form = UserChangePasswordForm(user_object, request.POST)
     if request.method == 'POST':
-        form = UserChangePasswordForm(user_object, request.POST)
         if form.is_valid():
             user_object = form.save()
             update_session_auth_hash(request, user_object)
@@ -82,7 +82,6 @@ def user_change_password_view(request):
         else:
             messages.error(request, "Не удалось изменить пароль")
 
-    form = UserChangePasswordForm()
     context = {
         'form': form
     }
