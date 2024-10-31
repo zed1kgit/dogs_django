@@ -1,11 +1,12 @@
 from django.http import HttpResponseRedirect, HttpResponse
 
+from django.contrib import messages
 from django.shortcuts import render, reverse, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 
-from users.forms import UserRegisterForm, UserLoginForm, UserForm, UserUpdateForm
-from users.models import User
+from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm
+
 
 def user_register_view(request):
     form = UserRegisterForm(request.POST)
@@ -33,8 +34,8 @@ def user_login_view(request):
                     return HttpResponseRedirect(reverse('dogs:index'))
                 else:
                     return HttpResponse('Аккаунт неактивен!')
-    else:
-        form = UserLoginForm()
+
+    form = UserLoginForm()
     context = {
         'form': form
     }
@@ -48,6 +49,7 @@ def user_profile_view(request):
         'title': f'Ваш профиль {user_object.first_name}',
     }
     return render(request, 'users/user_profile.html', context)
+
 
 @login_required
 def user_update_view(request):
@@ -65,6 +67,27 @@ def user_update_view(request):
         'form': UserUpdateForm,
     }
     return render(request, 'users/update_user.html', context)
+
+
+@login_required
+def user_change_password_view(request):
+    user_object = request.user
+    if request.method == 'POST':
+        form = UserPasswordChangeForm(user_object, request.POST)
+        if form.is_valid():
+            user_object = form.save()
+            update_session_auth_hash(request, user_object)
+            messages.success(request, "Пароль успешно изменён!")
+            return HttpResponseRedirect(reverse('users:profile_user'))
+        else:
+            messages.error(request, "Не удалось изменить пароль")
+
+    form = UserPasswordChangeForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'users/user_change_password.html', context)
+
 
 def user_logout_view(request):
     logout(request)
