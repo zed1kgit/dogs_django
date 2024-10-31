@@ -71,7 +71,7 @@ def user_update_view(request):
     context = {
         'user_object': user_object,
         'title': f'Изменить профиль {user_name}',
-        'form': UserUpdateForm,
+        'form': UserUpdateForm(instance=user_object),
     }
     return render(request, 'users/update_user.html', context)
 
