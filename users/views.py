@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 
-from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm
+from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm, UserForm
 from users.models import User
 from users.services import send_register_email, send_new_password
 
@@ -29,13 +29,13 @@ class UserLoginView(LoginView):
     form_class = UserLoginForm
 
 
-@login_required
-def user_profile_view(request):
-    user_object = request.user
-    context = {
-        'title': f'Ваш профиль {user_object.first_name}',
-    }
-    return render(request, 'users/user_profile.html', context)
+class UserProfileView(UpdateView):
+    model = User
+    form_class = UserForm
+    template_name = 'users/user_profile.html'
+
+    def get_object(self, queryset=None):
+        return self.request.user
 
 
 @login_required
