@@ -54,6 +54,11 @@ class UserPasswordChangeView(PasswordChangeView):
     template_name = 'users/user_change_password.html'
 
 
+class UserLogoutView(LogoutView):
+    pass
+    # template_name = 'users/logout.html'
+
+
 def user_logout_view(request):
     logout(request)
     return redirect('dogs:index')
