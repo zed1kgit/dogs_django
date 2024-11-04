@@ -1,0 +1,5 @@
+{% extends 'dogs/base.html' %}
+{% block content %}
+	<h1>Вы успешно вышли из вашего аккаунта</h1>
+    <a href="{% url 'users:login_user' %}">Нажмите сюда чтобы снова войти</a>
+{% endblock %}
