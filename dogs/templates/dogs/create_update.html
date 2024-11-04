@@ -5,7 +5,7 @@
         <div class="col-6">
             <div class="card">
                 <div class="card-header">
-                    {% if dog_object %}
+                    {% if object %}
                         Редактирование собаки
                     {% else %}
                         Добавление собаки
@@ -16,7 +16,7 @@
                     {% csrf_token %}
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-outline-success">
-                        {% if dog_object %}
+                        {% if object %}
                             Сохранить
                         {% else %}
                             Добавить
