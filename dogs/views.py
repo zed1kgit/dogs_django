@@ -1,6 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 
 from dogs.models import Category, Dog
 from dogs.forms import DogForm
@@ -35,13 +36,12 @@ def category_dogs(request, pk):
     return render(request, 'dogs/dogs.html', context)
 
 
-def dogs_list_view(request):
-    """Рендер страницы со всеми собаками"""
-    context = {
-        'dog_object_list': Dog.objects.all(),
-        'title': 'Все собаки',
+class DogListView(ListView):
+    model = Dog
+    extra_context = {
+        'title': 'Все наши собаки'
     }
-    return render(request, 'dogs/dogs.html', context)
+    template_name = 'dogs/dogs.html'
 
 
 def dog_create_view(request):
@@ -63,7 +63,7 @@ def dog_create_view(request):
 def dog_detail_view(request, pk):
     """Рендер страницы отображающая выбранную собаку"""
     context = {
-        'dog_object': Dog.objects.get(pk=pk),
+        'object': Dog.objects.get(pk=pk),
         'title': 'Вы выбрали данную собаку'
     }
     return render(request, 'dogs/detail.html', context)
@@ -79,7 +79,7 @@ def dog_update_view(request, pk):
             dog_object.save()
             return HttpResponseRedirect(reverse('dogs:detail_dog', args={pk: pk}))
     context = {
-        'dog_object': dog_object,
+        'object': dog_object,
         'form': DogForm(instance=dog_object)
     }
     return render(request, 'dogs/create_update.html', context)
@@ -92,5 +92,5 @@ def dog_delete_view(request, pk):
         dog_object.delete()
         return HttpResponseRedirect(reverse('dogs:list_dogs'))
     return render(request, 'dogs/delete.html', {
-        'dog_object': dog_object,
+        'object': dog_object,
     }, )
