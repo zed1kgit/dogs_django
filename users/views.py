@@ -3,6 +3,8 @@ import random
 
 from django.http import HttpResponseRedirect, HttpResponse
 
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.views.generic import CreateView, UpdateView
 from django.contrib import messages
 from django.shortcuts import render, reverse, redirect
 from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
@@ -11,22 +13,15 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm
+from users.models import User
 from users.services import send_register_email, send_new_password
 
 
-def user_register_view(request):
-    form = UserRegisterForm(request.POST)
-    if request.method == 'POST':
-        if form.is_valid():
-            new_user = form.save()
-            new_user.set_password(form.cleaned_data['password'])
-            new_user.save()
-            send_register_email(new_user.email)
-            return HttpResponseRedirect(reverse('users:login_user'))
-    context = {
-        'form': form
-    }
-    return render(request, 'users/register_user.html', context)
+class UserRegisterView(CreateView):
+    model = User
+    form_class = UserRegisterForm
+    success_url = reverse_lazy('users:login_user')
+    template_name = 'users/register_user.html'
 
 
 def user_login_view(request):
@@ -77,24 +72,6 @@ def user_update_view(request):
 
 
 @login_required
-def user_change_password_view(request):
-    user_object = request.user
-    form = UserChangePasswordForm(user_object, request.POST)
-    if request.method == 'POST':
-        if form.is_valid():
-            user_object = form.save()
-            update_session_auth_hash(request, user_object)
-            messages.success(request, "Пароль успешно изменён!")
-            return HttpResponseRedirect(reverse('users:profile_user'))
-        else:
-            messages.error(request, "Не удалось изменить пароль")
-
-    context = {
-        'form': form
-    }
-    return render(request, 'users/user_change_password.html', context)
-
-
 class UserPasswordChangeView(PasswordChangeView):
     form_class = UserChangePasswordForm
     success_url = reverse_lazy('users:profile_user')
