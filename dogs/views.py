@@ -51,13 +51,9 @@ class DogCreateView(CreateView):
     success_url = reverse_lazy('dogs:list_dogs')
 
 
-def dog_detail_view(request, pk):
-    """Рендер страницы отображающая выбранную собаку"""
-    context = {
-        'object': Dog.objects.get(pk=pk),
-        'title': 'Вы выбрали данную собаку'
-    }
-    return render(request, 'dogs/detail.html', context)
+class DogDetailView(DetailView):
+    model = Dog
+    template_name = 'dogs/detail.html'
 
 
 def dog_update_view(request, pk):
