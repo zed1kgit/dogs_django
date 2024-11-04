@@ -18,8 +18,10 @@ class DogForm(StyleFormMixin, forms.ModelForm):
         exclude = ('owner',)
 
     def clean_birth_date(self):
-        cd = self.cleaned_data['birth_date']
-        now_year = datetime.now().year
-        if now_year - cd.year > 100:
-            raise forms.ValidationError('Собака должна быть моложе 100 лет')
-        return cd
+        if self.cleaned_data['birth_date']:
+            cd = self.cleaned_data['birth_date']
+            now_year = datetime.now().year
+            if now_year - cd.year > 100:
+                raise forms.ValidationError('Собака должна быть моложе 100 лет')
+            return cd
+        return
