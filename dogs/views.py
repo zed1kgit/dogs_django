@@ -1,7 +1,7 @@
-from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from dogs.models import Category, Dog
 from dogs.forms import DogForm
@@ -44,11 +44,18 @@ class DogListView(ListView):
     template_name = 'dogs/dogs.html'
 
 
-class DogCreateView(CreateView):
+class DogCreateView(LoginRequiredMixin, CreateView):
     model = Dog
     form_class = DogForm
     template_name = 'dogs/create_update.html'
     success_url = reverse_lazy('dogs:list_dogs')
+
+    def form_valid(self, form):
+        self.object = form.save()
+        self.object.owner = self.request.user
+        self.object.save()
+        return super().form_valid(form)
+
 
 
 class DogDetailView(DetailView):
@@ -68,4 +75,4 @@ class DogUpdateView(UpdateView):
 class DogDeleteView(DeleteView):
     model = Dog
     template_name = 'dogs/delete.html'
-    reverse_lazy('dogs:list_dogs')
+    success_url =  reverse_lazy('dogs:list_dogs')
