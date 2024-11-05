@@ -1,9 +1,10 @@
+from django.core.exceptions import PermissionDenied
 from django.forms import inlineformset_factory
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from dogs.models import Category, Dog, Parent
 from dogs.forms import DogForm, ParentForm
@@ -74,6 +75,8 @@ class DogCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('dogs:list_dogs')
 
     def form_valid(self, form):
+        if self.request.user.role != UserRoles.USER:
+            raise PermissionDenied()
         self.object = form.save()
         self.object.owner = self.request.user
         self.object.save()
@@ -95,8 +98,8 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset=queryset)
-        if self.request.user != self.object.owner and not self.request.user.is_staff:
-            raise Http404
+        if self.request.user != self.object.owner and self.request.user.role != UserRoles.ADMIN:
+            raise PermissionDenied()
         return self.object
 
     def get_context_data(self, **kwargs):
@@ -119,10 +122,11 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
-class DogDeleteView(LoginRequiredMixin, DeleteView):
+class DogDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
     model = Dog
     template_name = 'dogs/delete.html'
     success_url = reverse_lazy('dogs:list_dogs')
+    permission_required = ('dogs.delete_dog',)
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset=queryset)
