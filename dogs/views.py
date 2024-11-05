@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
@@ -57,13 +58,12 @@ class DogCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-
 class DogDetailView(DetailView):
     model = Dog
     template_name = 'dogs/detail.html'
 
 
-class DogUpdateView(UpdateView):
+class DogUpdateView(LoginRequiredMixin, UpdateView):
     model = Dog
     form_class = DogForm
     template_name = 'dogs/create_update.html'
@@ -71,8 +71,20 @@ class DogUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('dogs:detail_dog', kwargs={'pk': self.object.pk})
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset=queryset)
+        if self.request.user != self.object.owner and not self.request.user.is_staff:
+            raise Http404
+        return self.object
 
-class DogDeleteView(DeleteView):
+
+class DogDeleteView(LoginRequiredMixin, DeleteView):
     model = Dog
     template_name = 'dogs/delete.html'
-    success_url =  reverse_lazy('dogs:list_dogs')
+    success_url = reverse_lazy('dogs:list_dogs')
+
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset=queryset)
+        if self.request.user != self.object.owner and not self.request.user.is_staff:
+            raise Http404
+        return self.object
