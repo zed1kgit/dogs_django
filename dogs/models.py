@@ -23,6 +23,7 @@ class Dog(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, verbose_name='breed')
     photo = models.ImageField(upload_to='dogs/', verbose_name='image', **NULLABLE)
     birth_date = models.DateField(verbose_name='birth_date', **NULLABLE)
+    is_active = models.BooleanField(default=True, verbose_name='active')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='owner', **NULLABLE)
 
