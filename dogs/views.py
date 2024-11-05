@@ -65,12 +65,7 @@ class DogUpdateView(UpdateView):
         return reverse_lazy('dogs:detail_dog', kwargs={'pk': self.object.pk})
 
 
-def dog_delete_view(request, pk):
-    """Рендер страницы и удаление выбранной собаки"""
-    dog_object = get_object_or_404(Dog, pk=pk)
-    if request.method == 'POST':
-        dog_object.delete()
-        return HttpResponseRedirect(reverse('dogs:list_dogs'))
-    return render(request, 'dogs/delete.html', {
-        'object': dog_object,
-    }, )
+class DogDeleteView(DeleteView):
+    model = Dog
+    template_name = 'dogs/delete.html'
+    reverse_lazy('dogs:list_dogs')
