@@ -2,8 +2,8 @@
 
 {% block content %}
 <div class="row">
-    {% for object in category_object_list %}
-        {% include 'dogs/includes/inc_category.html' with category_object=object %}
+    {% for object in object_list %}
+        {% include 'dogs/includes/inc_category.html' with object=object %}
     {% endfor %}
 </div>
 

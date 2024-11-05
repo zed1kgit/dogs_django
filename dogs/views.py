@@ -18,13 +18,12 @@ def index(request):
     return render(request, 'dogs/index.html', context)
 
 
-def categories(request):
-    """Рендер страницы пород"""
-    context = {
-        'category_object_list': Category.objects.all(),
-        'title': 'Породы'
+class CategoryListView(ListView, LoginRequiredMixin):
+    model = Category
+    extra_context = {
+        'title': 'Все наши породы'
     }
-    return render(request, 'dogs/categories.html', context)
+    template_name = 'dogs/categories.html'
 
 
 def category_dogs(request, pk):
