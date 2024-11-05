@@ -29,7 +29,7 @@ def category_dogs(request, pk):
     """Рендер страницы с собаками определенной породы"""
     category_item = Category.objects.get(pk=pk)
     context = {
-        'dog_object_list': Dog.objects.filter(category_id=pk),
+        'object_list': Dog.objects.filter(category_id=pk),
         'title': f'Собаки породы - {category_item.name}',
         'category_pk': category_item.pk,
     }
