@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 import pyodbc
-from config.settings import DATABASE, USER, PASSWORD, HOST
+from config.settings import DATABASE, USER, PASSWORD, HOST, CREATED_DATABASE
 
 
 class Command(BaseCommand):
@@ -8,7 +8,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         ConnectionString = f'''DRIVER={{ODBC Driver 17 for SQL Server}};
                                        SERVER={HOST};
-                                       DATABASE=DjangoDB;
+                                       DATABASE={CREATED_DATABASE};
                                        UID={USER};
                                        PWD={PASSWORD}'''
         try:

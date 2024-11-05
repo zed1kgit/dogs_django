@@ -82,6 +82,7 @@ HOST = os.getenv('MS_SQL_SERVER')
 DATABASE = os.getenv('MS_SQL_DATABASE')
 USER = os.getenv('MS_SQL_USER')
 PASSWORD = os.getenv('MS_SQL_KEY')
+CREATED_DATABASE = os.getenv('MS_SQL_CREATED_DATABASE')
 
 DATABASES = {
     'default': {
