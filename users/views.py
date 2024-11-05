@@ -1,15 +1,11 @@
 import string
 import random
 
-from django.http import HttpResponseRedirect, HttpResponse
 
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.views.generic import CreateView, UpdateView
-from django.contrib import messages
-from django.shortcuts import render, reverse, redirect
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm, UserForm
@@ -61,11 +57,6 @@ class UserPasswordChangeView(PasswordChangeView):
 
 class UserLogoutView(LogoutView):
     template_name = 'users/logout_user.html'
-
-
-def user_logout_view(request):
-    logout(request)
-    return redirect('dogs:index')
 
 
 @login_required
