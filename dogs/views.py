@@ -7,7 +7,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from dogs.models import Category, Dog, Parent
-from dogs.forms import DogForm, ParentForm
+from dogs.forms import DogForm, ParentForm, DogAdminForm
 from dogs.services import send_congratulation_mail
 from users.models import UserRoles
 
@@ -101,7 +101,6 @@ class DogDetailView(DetailView):
 
 class DogUpdateView(LoginRequiredMixin, UpdateView):
     model = Dog
-    form_class = DogForm
     template_name = 'dogs/create_update.html'
 
     def get_success_url(self):
@@ -131,6 +130,13 @@ class DogUpdateView(LoginRequiredMixin, UpdateView):
             formset.instance = self.object
             formset.save()
         return super().form_valid(form)
+
+    def get_form_class(self):
+        if self.request.user.role == UserRoles.ADMIN:
+            form_class = DogAdminForm
+        else:
+            form_class = DogForm
+        return form_class
 
 
 class DogDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
