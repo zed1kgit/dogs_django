@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.core.cache import cache
+from django.core.mail import send_mail
 
 from dogs.models import Category
 
@@ -14,3 +15,11 @@ def get_categories_cache():
         category_list = Category.objects.all()
 
     return category_list
+
+def send_congratulation_mail(email, obj, count):
+    send_mail(
+        subject=f'Поздравляем {count} просмотров!!',
+        message=f'Ваша собака - {obj.name}, преодолела {count} просмотров!!',
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[email],
+    )

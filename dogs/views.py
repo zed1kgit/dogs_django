@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 
 from dogs.models import Category, Dog, Parent
 from dogs.forms import DogForm, ParentForm
+from dogs.services import send_congratulation_mail
 from users.models import UserRoles
 
 
@@ -87,6 +88,16 @@ class DogDetailView(DetailView):
     model = Dog
     template_name = 'dogs/detail.html'
 
+    def get_object(self, queryset=None):
+        self.object = super().get_object(queryset=queryset)
+        if self.request.user != self.object.owner:
+            self.object.view_count += 1
+            self.object.save()
+            if self.object.view_count == 100 and self.object.owner:
+                send_congratulation_mail(self.object.owner, self.object, 100)
+            return self.object
+        return self.object
+
 
 class DogUpdateView(LoginRequiredMixin, UpdateView):
     model = Dog
@@ -133,6 +144,7 @@ class DogDeleteView(LoginRequiredMixin, DeleteView, PermissionRequiredMixin):
         if self.request.user != self.object.owner and not self.request.user.is_staff:
             raise Http404
         return self.object
+
 
 def dog_toggle_activity(request, pk):
     dog_item = get_object_or_404(Dog, pk=pk)
