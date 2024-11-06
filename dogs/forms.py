@@ -15,7 +15,7 @@ class StyleFormMixin:
 class DogForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Dog
-        exclude = ('owner', 'is_active',)
+        exclude = ('owner', 'is_active', 'view_count')
 
     def clean_birth_date(self):
         if self.cleaned_data['birth_date']:

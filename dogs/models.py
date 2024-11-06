@@ -24,6 +24,7 @@ class Dog(models.Model):
     photo = models.ImageField(upload_to='dogs/', verbose_name='image', **NULLABLE)
     birth_date = models.DateField(verbose_name='birth_date', **NULLABLE)
     is_active = models.BooleanField(default=True, verbose_name='active')
+    view_count = models.PositiveIntegerField(default=0, verbose_name='view_count')
 
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='owner', **NULLABLE)
 
