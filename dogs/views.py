@@ -93,9 +93,6 @@ class DogDetailView(DetailView):
         if self.request.user != self.object.owner:
             self.object.view_count += 1
             self.object.save()
-            if self.object.view_count == 100 and self.object.owner:
-                send_congratulation_mail(self.object.owner, self.object, 100)
-            return self.object
         return self.object
 
 

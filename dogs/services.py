@@ -1,8 +1,11 @@
 from django.conf import settings
 from django.core.cache import cache
 from django.core.mail import send_mail
+from celery import shared_task
+from django.shortcuts import get_object_or_404
 
-from dogs.models import Category
+from dogs.models import Category, Dog
+
 
 def get_categories_cache():
     if settings.CACHE_ENABLED:
@@ -16,6 +19,7 @@ def get_categories_cache():
 
     return category_list
 
+
 def send_congratulation_mail(email, obj, count):
     send_mail(
         subject=f'Поздравляем {count} просмотров!!',
@@ -23,3 +27,9 @@ def send_congratulation_mail(email, obj, count):
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[email],
     )
+
+
+@shared_task
+def send_congratulation_mail_task(email, obj_id, count):
+    obj = get_object_or_404(Dog, id=obj_id)
+    return send_congratulation_mail(email, obj, count)
