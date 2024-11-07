@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 
 from users.forms import UserRegisterForm, UserLoginForm, UserUpdateForm, UserChangePasswordForm, UserForm
 from users.models import User
-from users.services import send_register_email, send_new_password
+from users.services import send_register_email, send_new_password, send_register_email_task
 
 
 class UserRegisterView(CreateView):
@@ -21,7 +21,7 @@ class UserRegisterView(CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        send_register_email(self.object)
+        send_register_email_task.delay(self.object.email)
         return super().form_valid(form)
 
 
