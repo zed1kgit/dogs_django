@@ -3,7 +3,7 @@ import random
 
 
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView, UpdateView, ListView, DetailView
 from django.shortcuts import reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse_lazy
@@ -66,3 +66,20 @@ def user_generate_new_password(request):
     request.user.save()
     send_new_password(request.user.email, new_password)
     return redirect(reverse('dogs:index'))
+
+
+class UserListView(ListView):
+    model = User
+    extra_context = {
+        'title': 'Все пользователи сайта'
+    }
+    template_name = 'users/users.html'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(is_active=True)
+        return queryset
+
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'users/user_detail.html'
