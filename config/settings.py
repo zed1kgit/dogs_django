@@ -41,7 +41,8 @@ INSTALLED_APPS = [
 
     # Добавленное
     'users',
-    'dogs'
+    'dogs',
+    'reviews'
 ]
 
 MIDDLEWARE = [
