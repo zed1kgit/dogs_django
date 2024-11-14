@@ -37,7 +37,7 @@
     "fields": {
       "name": "Рекс",
       "category": 1,
-      "photo": "",
+      "photo": "dogs/5.jpg",
       "birth_date": "2018-05-15",
       "is_active": true,
       "view_count": 0,
@@ -50,7 +50,7 @@
     "fields": {
       "name": "Молли",
       "category": 1,
-      "photo": "",
+      "photo": "dogs/4.jpg",
       "birth_date": "2020-10-25",
       "is_active": true,
       "view_count": 0,
@@ -63,7 +63,7 @@
     "fields": {
       "name": "Макс",
       "category": 2,
-      "photo": "",
+      "photo": "dogs/8.jpg",
       "birth_date": "2017-03-12",
       "is_active": true,
       "view_count": 0,
@@ -76,7 +76,7 @@
     "fields": {
       "name": "Лаки",
       "category": 2,
-      "photo": "",
+      "photo": "dogs/7.jpg",
       "birth_date": "2019-06-30",
       "is_active": true,
       "view_count": 0,
@@ -89,7 +89,7 @@
     "fields": {
       "name": "Чарли",
       "category": 3,
-      "photo": "",
+      "photo": "dogs/2.jpg",
       "birth_date": "2021-02-20",
       "is_active": true,
       "view_count": 0,
@@ -102,7 +102,7 @@
     "fields": {
       "name": "Белла",
       "category": 3,
-      "photo": "",
+      "photo": "dogs/1.jpg",
       "birth_date": "2019-09-08",
       "is_active": true,
       "view_count": 0,
@@ -115,10 +115,10 @@
     "fields": {
       "name": "Бэмби",
       "category": 4,
-      "photo": "",
+      "photo": "dogs/9.jpg",
       "birth_date": "2018-04-03",
       "is_active": true,
-      "view_count": 0,
+      "view_count": 1,
       "owner": null
     }
   },
@@ -128,7 +128,7 @@
     "fields": {
       "name": "Вилли",
       "category": 3,
-      "photo": "",
+      "photo": "dogs/3.jpg",
       "birth_date": "2020-11-17",
       "is_active": true,
       "view_count": 0,
@@ -141,10 +141,10 @@
     "fields": {
       "name": "Форрест",
       "category": 4,
-      "photo": "",
+      "photo": "dogs/10.jpg",
       "birth_date": "2020-10-25",
       "is_active": true,
-      "view_count": 0,
+      "view_count": 101,
       "owner": null
     }
   }
