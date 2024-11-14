@@ -7,5 +7,5 @@ from dogs.forms import StyleFormMixin
 class ReviewForm(StyleFormMixin, forms.ModelForm):
     class Meta:
         model = Review
-        fields = ['title', 'slug', 'content']
+        fields = ['dog', 'title', 'content', 'slug']
 
