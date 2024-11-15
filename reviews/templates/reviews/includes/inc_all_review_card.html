@@ -2,10 +2,14 @@
 <div class="col-4">
     <div class="card mb-4 box-shadow">
         <div class="card-header">
-            <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
+            <h4 class="my-0 font-weight-normal">{{ object.dog }}</h4>
         </div>
         <div class="card-body">
-            <span class="text-muted">{{ object.timestamp }}</span>
+            <h3 class="card-title pricing-card-title">{{ object.title }}</h3>
+            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                <li>{{ object.author.first_name }} {{ object.author.last_name }}</li>
+                <li>{{ object.timestamp }}</li>
+            </ul>
         </div>
         <div class="card-footer"><a class="btn btn-lg btn-block btn-outline-info"
                href="{% url 'reviews:review_detail' object.pk %}">Подробнее</a>

@@ -4,10 +4,26 @@
 
     <div class="container">
     <div class="row">
-        {% for object in object_list %}
-        	{% include 'reviews/includes/inc_review_card.html' with object=object %}
-        {% endfor %}
+        {% if all %}
+            {% for object in object_list %}
+                    {% include 'reviews/includes/inc_all_review_card.html' with object=object %}
+            {% endfor %}
+        {% else %}
+            {% for object in object_list %}
+                {% include 'reviews/includes/inc_review_card.html' with object=object %}
+            {% endfor %}
+        {% endif %}
     </div>
+        {% if user.is_authenticated %}
+            <a href="" class="btn btn-outline-primary m-2">Добавить отзыв</a>
+            {% if all %}
+            	<a href="{% url 'reviews:all_reviews' %}" class="btn btn-outline-success m-2 float-right">Активные отзывы</a>
+                <a href="{% url 'reviews:all_inactive_reviews' %}" class="btn btn-outline-secondary m-2 float-right">Неактивные отзывы</a>
+            {% else %}
+                <a href="{% url 'reviews:reviews_list' pk %}" class="btn btn-outline-success m-2 float-right">Активные отзывы</a>
+                <a href="{% url 'reviews:inactive_reviews_list' pk %}" class="btn btn-outline-secondary m-2 float-right">Неактивные отзывы</a>
+            {% endif %}
+        {% endif %}
     </div>
 
 {% endblock %}
