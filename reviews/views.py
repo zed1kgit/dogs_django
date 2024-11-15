@@ -1,8 +1,9 @@
 from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 from dogs.models import Dog
 from reviews.forms import ReviewForm
@@ -82,9 +83,9 @@ class DogReviewUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         self.object = super().get_object(queryset)
-        if self.object.author != self.request.user or self.request.user not in [UserRoles.ADMIN, UserRoles.MODERATOR]:
-            raise PermissionDenied
-        return self.object
+        if self.object.author == self.request.user or self.request.user in [UserRoles.ADMIN, UserRoles.MODERATOR]:
+            return self.object
+        raise PermissionDenied
 
 
 class DogReviewCreateView(LoginRequiredMixin, CreateView):
@@ -92,13 +93,25 @@ class DogReviewCreateView(LoginRequiredMixin, CreateView):
     form_class = ReviewForm
 
 
-class DogReviewDeleteView(LoginRequiredMixin, DeleteView):
+class DogReviewDeleteView(LoginRequiredMixin, PermissionRequiredMixin, DeleteView):
     model = Review
     permission_required = 'reviews.delete_review'
 
     def get_success_url(self):
-        return reverse('reviews:review_detail', args=[self.kwargs['slug']])
+        return reverse('reviews:reviews_list', args=[self.kwargs['pk']])
 
 
 class DogReviewDetailView(LoginRequiredMixin, DetailView):
     model = Review
+
+
+def review_toggle_activity(request, slug):
+    review = get_object_or_404(Review, slug=slug)
+    if review.sign_of_review:
+        review.sign_of_review = False
+        review.save()
+        return HttpResponseRedirect(reverse('reviews:all_inactive_reviews'))
+    else:
+        review.sign_of_review = True
+        review.save()
+        return HttpResponseRedirect(reverse('reviews:all_reviews'))
