@@ -42,6 +42,7 @@ def category_dogs(request, pk):
 
 class DogListView(ListView):
     model = Dog
+    paginate_by = 6
     extra_context = {
         'title': 'Все наши собаки'
     }

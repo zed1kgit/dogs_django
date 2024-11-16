@@ -70,6 +70,7 @@ def user_generate_new_password(request):
 
 class UserListView(ListView):
     model = User
+    paginate_by = 3
     extra_context = {
         'title': 'Все пользователи сайта'
     }

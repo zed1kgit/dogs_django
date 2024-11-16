@@ -14,6 +14,7 @@ from users.models import UserRoles
 
 class AllDogReviewListView(LoginRequiredMixin, ListView):
     model = Review
+    paginate_by = 3
     extra_context = {
         'title': 'Отзывы о всех собаках',
         'all': True,
@@ -27,6 +28,7 @@ class AllDogReviewListView(LoginRequiredMixin, ListView):
 
 class AllInactiveDogReviewListView(LoginRequiredMixin, ListView):
     model = Review
+    paginate_by = 3
     extra_context = {
         'title': 'Все неактивные отзывы о собаках',
         'all': True,
@@ -43,6 +45,7 @@ class AllInactiveDogReviewListView(LoginRequiredMixin, ListView):
 
 class DogReviewListView(LoginRequiredMixin, ListView):
     model = Review
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -59,6 +62,7 @@ class DogReviewListView(LoginRequiredMixin, ListView):
 
 class InactiveDogReviewListView(LoginRequiredMixin, ListView):
     model = Review
+    paginate_by = 3
 
     def get_queryset(self):
         queryset = super().get_queryset()
