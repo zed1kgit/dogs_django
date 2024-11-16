@@ -38,7 +38,7 @@
                     {% else %}
                         <a href="{% url 'reviews:reviews_list' pk %}" class="btn btn-outline-primary"><< Назад</a>
                     {% endif %}
-                    {% if object and user.is_superuser or object.owner == user %}
+                    {% if object and user.is_superuser or object.author == user %}
                     	<a href="{% url 'reviews:review_delete' object.slug %}" class="btn btn-outline-danger float-right">Удалить</a>
                     {% endif %}
                 </div>
