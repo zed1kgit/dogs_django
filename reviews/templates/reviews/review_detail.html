@@ -1,0 +1,26 @@
+{% extends 'dogs/base.html' %}
+{% block content %}
+
+<div class="col-md-4">
+    <div class="card mb-4 box-shadow">
+        <div class="card-header">
+            <h3 class="card-title">{{ object.title }}</h3>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ object.content }}</p>
+        </div>
+        <div class="card-footer">
+            {% if object.sign_of_review %}
+                <a class="btn btn-link" href="{% url 'reviews:reviews_list' object.dog.pk %}">назад</a>
+            {% else %}
+                <a class="btn btn-link" href="{% url 'reviews:inactive_reviews_list' object.dog.pk %}">назад</a>
+            {% endif %}
+            {% if user.is_staff or user == object.owner %}
+            <a class="btn btn-link" href="{% url 'reviews:review_update' object.slug %}">обновить</a>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

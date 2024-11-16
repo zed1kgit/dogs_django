@@ -1,0 +1,48 @@
+{% extends 'dogs/base.html' %}
+
+{% block content %}
+    <form method="post" enctype="multipart/form-data" class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    {% if object %}
+                        Редактирование отзыва
+                    {% else %}
+                        Добавление отзыва
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" class="btn btn-outline-success" value="
+                        {% if object %}
+                            Сохранить
+                        {% else %}
+                            Добавить
+                        {% endif %}">
+                    {% if object %}
+                    <a href="{% url 'reviews:toggle_activity' object.slug %}"
+                       class="btn btn-outline-warning float-right">
+                        {% if object.sign_of_review %}
+                        	Деактивировать
+                        {% else %}
+                            Активировать
+                        {% endif %}
+                    </a>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    {% if object %}
+                    	<a href="{% url 'reviews:review_detail' object.slug %}" class="btn btn-outline-primary"><< Назад</a>
+                    {% else %}
+                        <a href="{% url 'reviews:reviews_list' pk %}" class="btn btn-outline-primary"><< Назад</a>
+                    {% endif %}
+                    {% if object and user.is_superuser or object.owner == user %}
+                    	<a href="{% url 'reviews:review_delete' object.slug %}" class="btn btn-outline-danger float-right">Удалить</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </form>
+{% endblock %}

@@ -5,13 +5,16 @@
             <h4 class="my-0 font-weight-normal">{{ object.title }}</h4>
         </div>
         <div class="card-body">
-            <span class="text-muted">{{ object.timestamp }}</span>
+            <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                <li>{{ object.author.first_name }} {{ object.author.last_name }}</li>
+                <li>{{ object.timestamp }}</li>
+            </ul>
         </div>
         <div class="card-footer"><a class="btn btn-lg btn-block btn-outline-info"
-               href="{% url 'reviews:review_detail' object.pk %}">Подробнее</a>
+               href="{% url 'reviews:review_detail' object.slug %}">Подробнее</a>
             {% if user.is_authenticated and user.is_staff or object.author == user %}
             	<a class="btn btn-lg btn-block btn-outline-warning"
-                   href="{% url 'reviews:review_update' object.pk %}">Изменить/Удалить</a>
+                   href="{% url 'reviews:review_update' object.slug %}">Изменить/Удалить</a>
             {% endif %}
         </div>
     </div>
