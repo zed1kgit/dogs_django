@@ -6,6 +6,27 @@ from dogs.models import Dog
 
 
 class Review(models.Model):
+    """
+    Модель отзыва.
+
+    Поля:
+        title (CharField): Заголовок отзыва.
+        slug (SlugField): Уникальный URL-адрес отзыва.
+        content (TextField): Содержимое отзыва.
+        timestamp (DateTimeField): Время создания отзыва.
+        sign_of_review (BooleanField): Признак наличия подписи под отзывом.
+        author (ForeignKey): Автор отзыва.
+        dog (ForeignKey): Собака, к которой относится отзыв.
+
+    Методы:
+        __str__(): Возвращает заголовок отзыва.
+        get_absolute_url(): Возвращает абсолютный URL отзыва.
+
+    Метакласс:
+        verbose_name: Название модели в единственном числе.
+        verbose_name_plural: Название модели во множественном числе.
+    """
+
     title = models.CharField(max_length=150, verbose_name='title')
     slug = models.SlugField(max_length=25, unique=True, db_index=True, verbose_name='URL')
     content = models.TextField(verbose_name='content')
@@ -15,9 +36,15 @@ class Review(models.Model):
     dog = models.ForeignKey(Dog, on_delete=models.CASCADE, verbose_name='dog')
 
     def __str__(self):
+        """
+        Возвращает строковое представление объекта отзыва.
+        """
         return self.title
 
     def get_absolute_url(self):
+        """
+        Возвращает абсолютный URL отзыва.
+        """
         return reverse('reviews:detail', kwargs={'slug': self.slug})
 
     class Meta:
