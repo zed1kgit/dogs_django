@@ -1,7 +1,8 @@
 {% extends 'dogs/base.html' %}
 
 {% block content %}
-<div class="row">
+    {% include 'dogs/includes/inc_category_search_field.html' %}
+<div class="row pt-md-2">
     {% for object in object_list %}
         {% include 'dogs/includes/inc_category.html' with object=object %}
     {% endfor %}

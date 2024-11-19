@@ -5,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, ListView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.db.models import Q
 
 from dogs.models import Category, Dog, Parent
 from dogs.forms import DogForm, ParentForm, DogAdminForm
@@ -68,6 +69,40 @@ class DogDeactivateListView(ListView, LoginRequiredMixin):
         elif self.request.user.role == UserRoles.USER:
             queryset = queryset.filter(is_active=False, owner=self.request.user)
         return queryset
+
+
+class DogSearchListView(ListView, LoginRequiredMixin):
+    model = Dog
+    template_name = 'dogs/dogs.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = Dog.objects.filter(
+            Q(name__icontains=query), is_active=True,
+        )
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Поиск собаки: {self.request.GET.get("q")}'
+        return context
+
+
+class CategorySearchListView(ListView, LoginRequiredMixin):
+    model = Category
+    template_name = 'dogs/categories.html'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        object_list = Category.objects.filter(
+            Q(name__icontains=query),
+        )
+        return object_list
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Поиск породы: {self.request.GET.get("q")}'
+        return context
 
 
 class DogCreateView(LoginRequiredMixin, CreateView):
